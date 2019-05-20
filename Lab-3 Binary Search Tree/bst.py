@@ -1,8 +1,6 @@
 # Author: Bishal Sarang
 # Implementation of BST using doubly linked list
 
-
-# TODO: 1. Implement Delete
 # TODO: 2. Unit test
 # TODO: 3. Iterative Approach
 class Node:
@@ -63,9 +61,10 @@ class Node:
 			# If left subtree exists try to insert (key, value) recursively
 			if self.has_left_child():
 				self.left.insert(key, value)
-			# Else make a new left node
-			# Set parent to the current node
-			self.left = Node(key, value)
+			else:
+				# Else make a new left node
+				# Set parent to the current node
+				self.left = Node(key, value)
 			self.left.parent = self
 			return True
 		# If key to be inserted is greater than current node key
@@ -76,7 +75,8 @@ class Node:
 				self.right.insert(key, value)
 			# Else make a new right node
 			# Set parent to the current node
-			self.right = Node(key, value)
+			else:
+				self.right = Node(key, value)
 			self.right.parent = self
 			return True
 	
@@ -173,15 +173,48 @@ class Node:
 	
 	def deletenode(self, key):
 		found_node = self.find(key)
-		
+		print("ss",found_node.parent.right)
 		# If node is in the BST
 		if found_node is not None:
+			# If the node to be deleted is leaf
 			if not found_node.has_left_child() and not found_node.has_right_child():
 				if found_node.parent.has_right_child():
 					if found_node.parent.right == found_node:
 						found_node.parent.right = None
-				else:
-					found_node.parent.left = None
+						
+				if found_node.parent.has_left_child():
+					if found_node.parent.left == found_node:
+						found_node.parent.left = None
+						
+			# If the node to be deleted has both child
+			# Find minimum value from right subtree
+			# Set (key, value) of that value to the found_node
+			# Delete the smallest value in right subtree by setting its parent to None
+			elif  found_node.has_left_child() and  found_node.has_right_child():
+				minm_node_right = self.find(key=found_node.right.smallest_key())
+				found_node.key = minm_node_right.key
+				found_node.value = minm_node_right.value
+				
+				minm_node_right.parent.left = None
+			# If the node to be deleted has one child
+			else:
+				if found_node.has_left_child():
+					if found_node.parent.has_right_child():
+						if found_node.parent.right == found_node:
+							found_node.parent.right = found_node.left
+						
+					if found_node.parent.has_left_child():
+						if found_node.parent.left == found_node:
+							found_node.parent.left = found_node.left
+							
+				if found_node.has_right_child():
+					if found_node.parent.has_right_child():
+						if found_node.parent.right == found_node:
+							found_node.parent.right = found_node.right
+						
+					if found_node.parent.has_left_child():
+						if found_node.parent.left == found_node:
+							found_node.parent.left = found_node.right
 				
 			return True
 		return False
@@ -273,10 +306,18 @@ class BST:
 if __name__ == "__main__":
 	bt = BST()
 	bt.insert(5, "e")
-	bt.insert(6, "f")
-	print(bt.root == bt.root)
-	print(bt.size)
-	print(bt.deletenode(6))
+	bt.insert(2, "f")
+	bt.insert(18, "e")
+	bt.insert(-4, "f")
+	bt.insert(3, "f")
+	# bt.insert(9, "f")
+	bt.insert(21, "f")
+	bt.insert(19, "f")
+	bt.insert(25, "f")
+	# bt.insert(6, "f")
+	bt.preorder()
+	bt.deletenode(18)
+	bt.preorder()
 	print(bt.size)
 	"""
 	print(bt.root)
