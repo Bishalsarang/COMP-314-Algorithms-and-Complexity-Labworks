@@ -310,20 +310,3 @@ class BST:
 	
 			
 			
-if __name__ == "__main__":
-	bt = BST()
-	l = [(5, "e"),
-		 (2, "b"),
-		 (18, "e"),
-		 (-4, "f"),
-		 (3, "f"),
-		 (21, "g"),
-		 (19, "h"),
-		 (25, "k"),
-		]
-	for key, value in l:
-		bt.insert(key, value)
-	inorder_path = bt.inorder()
-	print(inorder_path == sorted(l))
-	postorder_path = bt.postorder()
-	print(bt.preorder())
