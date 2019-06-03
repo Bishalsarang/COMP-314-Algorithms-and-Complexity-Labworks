@@ -1,7 +1,6 @@
 # Author: Bishal Sarang
 # Implementation of BST using doubly linked list
 
-# TODO: 2. Unit test
 # TODO: 3. Iterative Approach
 class Node:
 	"""
@@ -129,7 +128,7 @@ class Node:
 		return self.key
 	
 	
-	def preorder(self):
+	def preorder(self, path):
 		"""
 		Preorder traversal for current node
 		Args:
@@ -138,14 +137,14 @@ class Node:
 			None
 		"""
 		if self is not None:
-			print(self, end = " => ")
-			
+			path.append((self.key, self.value))
 			if self.has_left_child():
-				self.left.preorder()
+				self.left.preorder(path)
 			if self.has_right_child():
-				self.right.preorder()
-	
-	def postorder(self):
+				self.right.preorder(path)
+		return path
+		
+	def postorder(self, path):
 		"""
 		Post order traversal for current node
 		Args:
@@ -155,25 +154,27 @@ class Node:
 		"""
 		if self is not None:
 			if self.has_left_child():
-				self.left.postorder()
+				self.left.postorder(path)
 			if self.has_right_child():
-				self.right.postorder()
-			print(self, end = " => ")
+				self.right.postorder(path)
+			path.append((self.key, self.value))
+		return path
 	
-	def inorder(self):
+	def inorder(self, path):
 		"""
 		Inorder traversal of current node
 		"""
 		if self is not None:
 			if self.has_left_child():
-				self.left.postorder()
-			print(self, end = " => ")
+				self.left.inorder(path)
+			#print(self, end = " => ")
+			path.append((self.key, self.value))
 			if self.has_right_child():
-				self.right.postorder()
+				self.right.inorder(path)
+		return path
 	
 	def deletenode(self, key):
 		found_node = self.find(key)
-		print("ss",found_node.parent.right)
 		# If node is in the BST
 		if found_node is not None:
 			# If the node to be deleted is leaf
@@ -195,7 +196,7 @@ class Node:
 				found_node.key = minm_node_right.key
 				found_node.value = minm_node_right.value
 				
-				minm_node_right.parent.left = None
+				minm_node_right.parent.right = None
 			# If the node to be deleted has one child
 			else:
 				if found_node.has_left_child():
@@ -274,19 +275,25 @@ class BST:
 			return self.root.smallest_key()
 	
 	def preorder(self):
-		print("Pre Order Traversal is ")
-		self.root.preorder()
-		print("")
+		
+		path = []
+		if self.root is not None:
+			return self.root.preorder(path)
+		return []
 		
 	def postorder(self):
-		print("Post Order Traverasal is ")
-		self.root.postorder()
-		print("")
+		
+		path = []
+		if self.root is not None:
+			return self.root.postorder(path)
+		return []
 		
 	def inorder(self):
-		print("In Order traversal is")
-		self.root.inorder()
-		print("")
+		
+		path = []
+		if self.root is not None:
+			return self.root.inorder(path)
+		return []
 		
 	def deletenode(self, key):
 		if self.root is not None:
@@ -305,26 +312,18 @@ class BST:
 			
 if __name__ == "__main__":
 	bt = BST()
-	bt.insert(5, "e")
-	bt.insert(2, "f")
-	bt.insert(18, "e")
-	bt.insert(-4, "f")
-	bt.insert(3, "f")
-	# bt.insert(9, "f")
-	bt.insert(21, "f")
-	bt.insert(19, "f")
-	bt.insert(25, "f")
-	# bt.insert(6, "f")
-	bt.preorder()
-	bt.deletenode(18)
-	bt.preorder()
-	print(bt.size)
-	"""
-	print(bt.root)
-	bt.preorder()
-	bt.inorder()
-	bt.postorder()
-	print(bt)
-	bt.deletenode(5)
-	print(bt.root)
-	"""
+	l = [(5, "e"),
+		 (2, "b"),
+		 (18, "e"),
+		 (-4, "f"),
+		 (3, "f"),
+		 (21, "g"),
+		 (19, "h"),
+		 (25, "k"),
+		]
+	for key, value in l:
+		bt.insert(key, value)
+	inorder_path = bt.inorder()
+	print(inorder_path == sorted(l))
+	postorder_path = bt.postorder()
+	print(bt.preorder())
