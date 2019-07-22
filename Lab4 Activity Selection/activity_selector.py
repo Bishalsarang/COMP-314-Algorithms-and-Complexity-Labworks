@@ -72,13 +72,13 @@ def main():
     # USing iterative version
     selected_activities_index = select_activity_i(s, e)
     print("The optimal schedule by iterative version is as follows: ")
-    for i in range(len(selected_activities_index)):
+    for i in selected_activities_index:
         print(f"{s[i]} - {e[i]}")
 
     # USing recursive version
     selected_activities_index = select_activity_r(s, e, 0)
     print("The optimal schedule by recursive version is as follows: ")
-    for i in range(len(selected_activities_index)):
+    for i in selected_activities_index:
         print(f"{s[i]} - {e[i]}")
 
 if __name__ == "__main__":
